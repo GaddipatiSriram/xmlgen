@@ -1,0 +1,102 @@
+{
+    "services": [
+        {
+            "type": "Jms",
+            "features": [
+                "wmqJmsClient-2.0",
+                "jndi-1.0"
+            ],
+            "jmsConnectionFactory": {
+                "jndiName": "jms/wmqCF",
+                "connectionManagerRef": "ConMgr6",
+                "transportType": "CLIENT",
+                "hostName": "localhost",
+                "port": 1414,
+                "channel": "SYSTEM.DEF.SVRCONN",
+                "queueManager": "QM1"
+            },
+            "connectionManager": {
+                "id": "ConMgr6",
+                "maxPoolSize": "2"
+            },
+            "jmsQueue": {
+                "id": "jms/queue1",
+                "jndiName": "jms/wmqQ1",
+                "baseQueueName": "MDBQ",
+                "baseQueueManagerName": "QM1"
+            }
+        },
+        {
+            "type": "Jms",
+            "features": [
+                "wmqJmsClient-2.0",
+                "jndi-1.0"
+            ],
+            "jmsConnectionFactory": {
+                "jndiName": "jms/wmqCF2",
+                "connectionManagerRef": "ConMgr6",
+                "transportType": "CLIENT",
+                "hostName": "localhost",
+                "port": 1414,
+                "channel": "SYSTEM.DEF.SVRCONN",
+                "queueManager": "QM2"
+            },
+            "connectionManager": {
+                "id": "ConMgr6",
+                "maxPoolSize": "2"
+            },
+            "jmsQueue": {
+                "id": "jms/queue2",
+                "jndiName": "jms/wmqQ2",
+                "baseQueueName": "MDBQ",
+                "baseQueueManagerName": "QM2"
+            }
+        },
+        {
+            "type": "Jdbc",
+            "features": [
+                "jdbc-4.1"
+            ],
+            "dataSource": {
+                "id": "OracleJdbc",
+                "jndiName": "jms/gtsp",
+                "libraryRef": "OracleLib",
+                "URL": "abc.test.com/HAGTSPQC",
+                "user": "gtsp",
+                "password": "gtspqc14"
+            },
+            "connectionManager": {
+                "agedTimeout": "-1",
+                "connectionTimeout": "180",
+                "maxIdelTime": "1800",
+                "maxPoolSize": "50",
+                "minPoolSize": "20",
+                "purgePolicy": "EntirePool",
+                "reapTime": "180"
+            }
+        },
+        {
+            "type": "Jdbc",
+            "features": [
+                "jdbc-4.1"
+            ],
+            "dataSource": {
+                "id": "OracleJdbc",
+                "jndiName": "jms/gpospool",
+                "libraryRef": "OracleLib",
+                "URL": "abc.text.com/HAGPOSDEV",
+                "user": "gtsp",
+                "password": "gtspqc14"
+            },
+            "connectionManager": {
+                "agedTimeout": "-1",
+                "connectionTimeout": "180",
+                "maxIdelTime": "1800",
+                "maxPoolSize": "50",
+                "minPoolSize": "20",
+                "purgePolicy": "EntirePool",
+                "reapTime": "180"
+            }
+        }
+    ]
+}

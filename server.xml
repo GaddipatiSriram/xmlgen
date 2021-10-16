@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<server description="wlp">
+  <featureManager>
+    <feature>wmqJmsClient-2.0</feature>
+    <feature>jndi-1.0</feature>
+    <feature>jdbc-4.1</feature>
+  </featureManager>
+  <jmsConnectionFactory connectionManagerRef="ConMgr6" jndiName="jms/wmqCF">
+    <properties.wmqJms channel="SYSTEM.DEF.SVRCONN" hostName="localhost" port="1414" queueManager="QM1" transportType="CLIENT"/>
+  </jmsConnectionFactory>
+  <connectionManager id="ConMgr6" maxPoolSize="2"/>
+  <jmsQueue id="jms/queue1" jndiName="jms/wmqQ1">
+    <properties.wmqJms baseQueueManagerName="QM1" baseQueueName="MDBQ"/>
+  </jmsQueue>
+  <dataSource id="OracleJdbc" jndiName="jdbc/gtsp">
+    <jdbcDriver libraryRef="OracleLib"/>
+    <properties.db2.jcc databaseName="SAMPLEDB" portNumber="50000" serverName="localhost"/>
+    <connectionManager agedTimeout="30m" connectionTimeout="10s" maxIdleTime="1800" maxPoolSize="20" minPoolSize="5" purgePolicy="EntirePool" reapTime="180"/>
+  </dataSource>
+</server>

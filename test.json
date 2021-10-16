@@ -1,0 +1,26 @@
+{
+    "type": "Jms",
+    "features": [
+        "wmqJmsClient-2.0",
+        "jndi-1.0"
+    ],
+    "jmsConnectionFactory": {
+        "jndiName": "jms/wmqCF2",
+        "connectionManagerRef": "ConMgr7",
+        "transportType": "CLIENT",
+        "hostName": "localhost",
+        "port": 1414,
+        "channel": "SYSTEM.DEF.SVRCONN",
+        "queueManager": "QM2"
+    },
+    "connectionManager": {
+        "id": "ConMgr7",
+        "maxPoolSize": "2"
+    },
+    "jmsQueue": {
+        "id": "jms/queue2",
+        "jndiName": "jms/wmqQ2",
+        "baseQueueName": "MDBQ",
+        "baseQueueManagerName": "QM2"
+    }
+}
