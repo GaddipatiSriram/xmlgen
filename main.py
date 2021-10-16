@@ -11,56 +11,6 @@ test_json = 'test.json'
 tree = ET.parse(server_xml)
 root = tree.getroot()
 
-def find(key, dictionary):
-    '''
-        Does Nested Lookup
-    '''
-    for k, v in dictionary.items():
-        if k == key:
-            yield v
-        elif isinstance(v, dict):
-            for result in find(key, v):
-                yield result
-        elif isinstance(v, list):
-            for d in v:
-                if isinstance(d, dict):
-                    for result in find(key, d):
-                        yield result
-
-
-def has_value(obj, val):
-    if isinstance(obj, dict):
-        values = obj.values()
-    elif isinstance(obj, list):
-        values = obj
-    if val in values:
-        return True
-    for v in values:
-        if isinstance(v, (dict, list)) and has_value(v, val):
-            return True
-    return False
-
-
-def prettify(func):
-    def wrapper(*args,**kwargs):
-        rough_string = ET.tostring(root, 'utf-8')
-        reparsed = parseString(rough_string)
-        data = '\n'.join([line for line in reparsed.toprettyxml(indent= ' '*2).split('\n') if line.strip()])
-        with open(server_xml, 'w') as f:
-            print(data, file =f)
-        response = func(*args)
-        return response
-    return wrapper
-
-
-def run_all(func):
-    def wrapper(*args,**kwargs):
-        print("Hello World!!")
-        response = func(*args)
-        return response
-    return wrapper
-
-
 
 class Params(object):
     def __init__(self):
@@ -106,6 +56,7 @@ class Server(object):
             features.append(feature.text)
         return features
 
+
 class Configure(Params, Server):
     def __init__(self):
         Params.__init__(self)
@@ -129,11 +80,13 @@ class Configure(Params, Server):
             ET.SubElement(features, 'feature').text = feature
             tree.write(server_xml) 
 
-
+    @prettify
     def configure_services(self):
-        fields = {'name':Jms}
-        for key in fields:
-            fields[key]()
+        services = {'Jms':Jms, 'Jdbc': Jdbc, 'Odbc': Odbc}
+        for service in self.required_services:
+            if service in services.keys():
+                services[service]()
+
 
 
 class Jms:
@@ -192,8 +145,64 @@ class Jdbc:
 
         pass
 
+
+
+class Odbc:
+    def __init__(self):
+        # Check driver ref if exists ignore or add it
+        pass
+
+    def data_source (self):
+
+        pass
+
+    def connection_manager (self):
+
+        pass
+
+
+
+
 Configure().configure_services()
 
 
+def find(key, dictionary):
+    '''
+        Does Nested Lookup
+    '''
+    for k, v in dictionary.items():
+        if k == key:
+            yield v
+        elif isinstance(v, dict):
+            for result in find(key, v):
+                yield result
+        elif isinstance(v, list):
+            for d in v:
+                if isinstance(d, dict):
+                    for result in find(key, d):
+                        yield result
 
 
+def has_value(obj, val):
+    if isinstance(obj, dict):
+        values = obj.values()
+    elif isinstance(obj, list):
+        values = obj
+    if val in values:
+        return True
+    for v in values:
+        if isinstance(v, (dict, list)) and has_value(v, val):
+            return True
+    return False
+
+
+def prettify(func):
+    def wrapper(*args,**kwargs):
+        rough_string = ET.tostring(root, 'utf-8')
+        reparsed = parseString(rough_string)
+        data = '\n'.join([line for line in reparsed.toprettyxml(indent= ' '*2).split('\n') if line.strip()])
+        with open(server_xml, 'w') as f:
+            print(data, file =f)
+        response = func(*args)
+        return response
+    return wrapper
